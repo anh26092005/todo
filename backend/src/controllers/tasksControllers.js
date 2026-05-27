@@ -1,5 +1,13 @@
 
-export const getALLTasks = (req, res) => {
+export const getALLTasks = async (req, res) => {
+    try {
+        const tasks = await Task.find();
+        res.status(200).json(tasks);
+
+    } catch (error) {
+        console.error('Error fetching tasks', error);
+        res.status(500).json({ message: 'Error fetching tasks' });
+    }
     res.status(200).send('Nhiemvu can lam');
 }
 export const createTask = (req, res) => {
