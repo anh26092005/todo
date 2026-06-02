@@ -3,7 +3,7 @@ import Task from "../models/Task.js";
 export const getALLTasks = async (req, res) => {
     try {
 
-        const tasks = await Task.find();
+        const tasks = await Task.find().sort({ createTaskedAt: -1 });
         res.status(200).json(tasks);
     } catch (error) {
         console.error('Loi khi goi getAllTasks', error);
@@ -43,6 +43,15 @@ export const updatedTask = async (req, res) => {
     }
 };
 
-export const deleteTask = (req, res) => {
-    res.status(200).json({ message: `Task deleted successfully` });
+export const deleteTask = async (req, res) => {
+    try {
+        const deletedTask = await Task.findByIdAndDelete(req.params.id);
+        if (!deletedTask) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+        res.status(200).json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        console.error('Loi khi goi deleteTask', error);
+        res.status(500).json({ message: 'Error deleting task' });
+    }
 };
